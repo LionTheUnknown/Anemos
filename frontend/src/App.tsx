@@ -9,38 +9,24 @@ import Grid from '@mui/material/Grid';
 import Papa from 'papaparse';
 import { styled } from '@mui/material/styles';
 import Stack from '@mui/material/Stack';
-
 import Paper from '@mui/material/Paper';
+import type { City } from './common/types/City';
 
 const Item = styled(Paper)(({ theme }) => ({
-  backgroundColor: '#fff',
+  backgroundColor: '#ffffff',
   ...theme.typography.body2,
   padding: theme.spacing(1),
   textAlign: 'center',
   color: (theme.vars ?? theme).palette.text.secondary,
   ...theme.applyStyles('dark', {
-    backgroundColor: '#1A2027',
+    backgroundColor: 'rgba(0, 0, 0, 0.3)',
+    border: '1px solid #000000',
   }),
 }));
 
-
-type WorldCity = {
-  city: string;
-  city_ascii: string;
-  lat: string;
-  lng: string;
-  country: string;
-  iso2: string;
-  iso3: string;
-  admin_name: string;
-  capital: string;
-  population: string;
-  id: string;
-}
-
 function App() {
   const [city, setCity] = useState<string | null>(null);
-  const [cityList, setCityList] = useState<WorldCity[]>([]);
+  const [cityList, setCityList] = useState<City[]>([]);
   const [inputValue, setInputValue] = useState<string>("");
 
   let localTime = new Date().toLocaleTimeString();
@@ -66,7 +52,7 @@ function App() {
     fetch('/worldcities.csv')
       .then((res) => res.text())
       .then((csvText) => {
-        const result = Papa.parse<WorldCity>(csvText, {
+        const result = Papa.parse<City>(csvText, {
           header: true,
           skipEmptyLines: true,
         });
@@ -86,49 +72,135 @@ function App() {
   }, [city]);
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh', width: '100%' }}>
-    <Box sx={{ flexGrow: 1, width: '100%', minHeight: 0, p: 2 }}>
-      <Grid container spacing={2} sx={{ height: '100%' }}>
-        <Grid size={{ xs: 12, md: 8 }} sx={{ minHeight: 200 }}>
-          <Item sx={{ height: '100%', boxSizing: 'border-box' }}>
-          <Autocomplete
-        disablePortal
-        options={cityList.map((c) => c.city)}
-        filterOptions={(options, state) => {
-          if (state.inputValue.length < 1) {
-            return [];
-          }
-          return options.filter((option) => option.toLowerCase().startsWith(state.inputValue.toLowerCase())).slice(0, 10);
-        }}
-        sx={{ width: 300 }}
-        renderInput={(params) => <TextField {...params} label="City" variant="outlined" />}
-        value={city}
-        onChange={(event: any, newValue: string | null) => {
-          setCity(newValue);
-          setInputValue(newValue || "");
-        }}
-        inputValue={inputValue}
-        onInputChange={(event, newInputValue) => {
-          setInputValue(newInputValue);
-        }}
-      />
-            <Stack spacing={2} sx={{ height: '100%' }}>
-              <div>Current Temperature: {forecast?.temperature} °C</div>
-              <div>Apparent Temperature: {forecast?.apparent_temperature} °C</div>
-              <div>Wind Speed: {forecast?.windSpeed} km/h</div>
-              <div>Humidity: {forecast?.humidity} %</div>
-              <div>{twilightTime}</div>
-            </Stack>
-          </Item>
+    <div style={{ display: 'flex'}}>
+      <Box sx={{ width: 'fit-content', alignSelf: 'center', p: 2, flexDirection: 'column' }}>
+        <Grid container size={8} columns={8} spacing={2} sx={{ alignItems: 'stretch' }}>
+          <Grid container size={4} spacing={2} sx={{
+            border: '1px solid #ccc',
+            borderRadius: 1,
+            p: 2,
+            justifyContent: "center",
+            alignSelf: 'flex-start',
+          }}>
+            <Grid container size={8} direction="row" sx={{
+            justifyContent: "space-between",
+            alignItems: "center"}}>
+              <Grid size={2}>
+                <Autocomplete
+                    autoSelect
+                    disablePortal
+                    options={cityList.map((c) => c.city)}
+                    filterOptions={(options, state) => {
+                      if (state.inputValue.length < 1) return [];
+                      const input = state.inputValue.toLowerCase();
+                      return options
+                        .filter((option) => option.toLowerCase().startsWith(input))
+                        .sort((a, b) => {
+                          const aExact = a.toLowerCase() === input;
+                          const bExact = b.toLowerCase() === input;
+                          if (aExact && !bExact) return -1;
+                          if (!aExact && bExact) return 1;
+                          return a.length - b.length || a.localeCompare(b);
+                        })
+                        .slice(0, 10);
+                    }}
+                    sx={{ width: 300 }}
+                    renderInput={(params) => <TextField {...params} label="City" variant="outlined" />}
+                    value={city}
+                    onChange={(event: any, newValue: string | null) => {
+                      setCity(newValue);
+                      setInputValue(newValue || "");
+                    }}
+                    inputValue={inputValue}
+                    onInputChange={(event, newInputValue) => {
+                      setInputValue(newInputValue);
+                    }}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter' && inputValue) {
+                        const first = cityList
+                          .map((c) => c.city)
+                          .find((city) => city.toLowerCase().startsWith(inputValue.toLowerCase()));
+                        if (first) {
+                          setCity(first);
+                          setInputValue(first);
+                          e.preventDefault();
+                        }
+                      }
+                    }}
+                  />
+              </Grid>
+              <Grid size={2}>
+                <Item>°C</Item>
+              </Grid>
+            </Grid>
+          
+            <Grid
+              container size={8} direction="row" sx={{
+                justifyContent: "flex-start",
+                alignItems: "center",}}>
+                <Grid size={2}>
+                <Item>Sunday</Item>
+                </Grid>
+            </Grid>
+
+            <Grid container columns={8} size={8}>
+              <Grid size={4}>
+                  <Item sx={{ height: '100%', boxSizing: 'border-box' }}>Weather ICON</Item>
+              </Grid>
+              <Grid size={4}>
+                <Stack spacing={2}>
+                  <Item>
+                    <div>Current Temperature: {forecast?.temperature} °C</div>
+                  </Item>
+                  <Item>
+                    <div>Apparent Temperature: {forecast?.apparent_temperature} °C</div>
+                  </Item>
+                </Stack>
+              </Grid>
+            </Grid>
+
+            <Grid container columns={8} size={8}>
+              <Grid size={4}>
+                  <Item>
+                    <div>Wind Speed: {forecast?.windSpeed} km/h</div>
+                  </Item>
+              </Grid>
+
+              <Grid size={4}>
+                  <Item>
+                    <div>Humidity: {forecast?.humidity} %</div>
+                  </Item>
+              </Grid>
+            </Grid>
+
+            <Grid size={8}>
+                  <Item>
+                    <div>{twilightTime}</div>
+                  </Item>
+              </Grid>
+          </Grid>
+
+          <Grid container size={4} columns={4} spacing={2} sx={{
+            border: '1px solid #ccc',
+            borderRadius: 1,
+            p: 2,
+            justifyContent: "center",
+            alignSelf: 'stretch',
+          }}>
+            <Grid size={4}>
+              <Stack spacing={2} sx={{ height: '100%' }}>
+                <Item sx={{ height: '100%', boxSizing: 'border-box' }}>
+                  <div>Other Countries</div>
+                </Item>
+
+                <Item sx={{ height: '100%', boxSizing: 'border-box' }}>
+                  <div>7 Day Forecast graph</div>
+                </Item>
+              </Stack>
+            </Grid>
+          </Grid>
         </Grid>
-        <Grid size={{ xs: 12, md: 4 }} sx={{ minHeight: 200 }}>
-          <Stack spacing={2} sx={{ height: '100%' }}>
-            <Item sx={{ flex: 1, boxSizing: 'border-box' }}>Column 1 - Row 1</Item>
-            <Item sx={{ flex: 1, boxSizing: 'border-box' }}>Column 1 - Row 2</Item>
-          </Stack>
-        </Grid>
-      </Grid>
-    </Box>
+      </Box>
     </div>
   );
 }
