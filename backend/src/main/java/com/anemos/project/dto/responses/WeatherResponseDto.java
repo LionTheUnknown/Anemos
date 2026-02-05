@@ -1,5 +1,6 @@
 package com.anemos.project.dto.responses;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -11,6 +12,9 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 @Builder
 public class WeatherResponseDto {
+    @JsonProperty("city_name")
+    private String city;
+    private String country;
     private Double latitude;
     private Double longitude;
     private String timezone;
@@ -22,4 +26,5 @@ public class WeatherResponseDto {
     private String time;
     private String sunset;
     private String sunrise;
+    private String weather_code;
 }

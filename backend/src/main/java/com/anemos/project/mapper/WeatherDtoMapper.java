@@ -10,6 +10,10 @@ import java.util.List;
 @Service
 public class WeatherDtoMapper {
     public WeatherResponseDto toWeatherResponseDto(OpenMeteoResponseDto response) {
+        return toWeatherResponseDto(null, null, response);
+    }
+
+    public WeatherResponseDto toWeatherResponseDto(String city, String country, OpenMeteoResponseDto response) {
         if (response == null || response.getCurrent() == null) {
             return null;
         }
@@ -18,6 +22,8 @@ public class WeatherDtoMapper {
         String sunset = getFirst(response.getDaily(), DailyWeatherDto::getSunset);
 
         return WeatherResponseDto.builder()
+                .city(city)
+                .country(country)
                 .latitude(response.getLatitude())
                 .longitude(response.getLongitude())
                 .timezone(response.getTimezone())
@@ -29,6 +35,7 @@ public class WeatherDtoMapper {
                 .time(response.getCurrent().getTime())
                 .sunrise(sunrise)
                 .sunset(sunset)
+                .weather_code(response.getCurrent().getWeather_code())
                 .build();
     }
 
@@ -38,4 +45,5 @@ public class WeatherDtoMapper {
         List<String> times = getter.apply(daily);
         return (times != null && !times.isEmpty()) ? times.get(0) : null;
     }
+    
 }

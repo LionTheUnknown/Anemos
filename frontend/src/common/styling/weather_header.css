@@ -1,0 +1,13 @@
+.header-button.MuiButton-root {
+    border-radius: 0.5rem;
+    border-color: white;
+    color: white;
+  }
+  
+.header-button.MuiButton-contained {
+  background-color: #1f2933;
+}
+
+.header-button.MuiButton-contained:hover {
+  background-color: #111827;
+}

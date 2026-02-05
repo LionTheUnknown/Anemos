@@ -1,6 +1,6 @@
 import { APIResponse } from './ApiResponse';
 
-const baseUrl = process.env.REACT_APP_BACKEND_URL || 'http://localhost:8080/api';
+const baseUrl = import.meta.env.VITE_BACKEND_URL || 'http://localhost:8080/api';
 
 export async function apiFetch<T = any>(
   url: string,

@@ -22,4 +22,6 @@ public class CurrentWeatherDto {
     private Double temperature;
     
     private Double apparent_temperature;
+
+    private String weather_code;
 }
