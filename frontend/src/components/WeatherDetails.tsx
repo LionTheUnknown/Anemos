@@ -1,5 +1,5 @@
 import Grid from '@mui/material/Grid';
-import type { Forecast } from '../common/types/forecast';
+import type { CityWeather } from '../common/types/forecast';
 import { Item } from './Item';
 import Stack from '@mui/material/Stack';
 import AirIcon from '@mui/icons-material/Air';
@@ -8,7 +8,7 @@ import WbTwilightIcon from '@mui/icons-material/WbTwilight';
 import CloudySnowingIcon from '@mui/icons-material/CloudySnowing';
 
 interface WeatherDetailsProps {
-  forecast: Forecast | undefined;
+  forecast: CityWeather | undefined;
   twilightTime: string | null;
 }
 
@@ -49,7 +49,7 @@ export default function WeatherDetails({ forecast, twilightTime }: WeatherDetail
                 <div className="text-lg"><CloudySnowingIcon/> Chance of rain</div>
 
                 <Stack direction="row" spacing={0.5} alignItems="baseline">
-                  <div className="text-2xl">{forecast?.rain}</div>
+                  <div className="text-2xl">{forecast?.rain != null ? Math.round(forecast.rain * 100) : '—'}</div>
                   <div> %</div>
                 </Stack>
               </Stack>

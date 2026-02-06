@@ -1,16 +1,19 @@
+import { WEATHER_CODE_MAP } from '../common/records/weather_code';
+
 interface WeatherIconProps {
-  weather_icon: string;
+  weather_code?: number | string;
   size?: number;
   alt?: string;
 }
 
-
 export default function WeatherIcon({
-  weather_icon,
+  weather_code,
   size = 256,
   alt = "Weather condition",
 }: WeatherIconProps) {
-  const src = `/weather_icons/${weather_icon}.png`;
+  const code = typeof weather_code === 'number' ? weather_code : parseInt(String(weather_code ?? 0), 10);
+  const weatherInfo = WEATHER_CODE_MAP[code] ?? WEATHER_CODE_MAP[0];
+  const src = `/weather_icons/${weatherInfo.icon}.png`;
 
   return (
     <img

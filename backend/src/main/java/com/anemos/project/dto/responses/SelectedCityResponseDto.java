@@ -12,14 +12,11 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class WeatherResponseDto {
+public class SelectedCityResponseDto {
 
     @JsonProperty("selected_city_current")
     private CityWeatherDto selectedCityCurrent;
 
     @JsonProperty("selected_city_forecast")
     private List<DailyForecastItemDto> selectedCityForecast;
-
-    @JsonProperty("top_cities")
-    private List<CityWeatherDto> topCities;
 }

@@ -5,6 +5,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestParam;
+import com.anemos.project.dto.responses.CityWeatherDto;
+import com.anemos.project.dto.responses.SelectedCityResponseDto;
 import com.anemos.project.dto.responses.WeatherResponseDto;
 
 import java.util.List;
@@ -24,18 +26,36 @@ public class WeatherController {
     }
 
     @GetMapping
-    public ResponseEntity<List<WeatherResponseDto>> getWeather(
+    public ResponseEntity<WeatherResponseDto> getWeather(
             @RequestParam String name,
             @RequestParam String country,
             @RequestParam double lat,
             @RequestParam double lon) {
-        List<WeatherResponseDto> response = service.getWeather(name, country, lat, lon);
+        WeatherResponseDto response = service.getWeather(name, country, lat, lon);
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/selected")
+    public ResponseEntity<SelectedCityResponseDto> getSelectedCityWeather(
+            @RequestParam String name,
+            @RequestParam String country,
+            @RequestParam double lat,
+            @RequestParam double lon) {
+        SelectedCityResponseDto response = service.getSelectedCityWeather(name, country, lat, lon);
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/top-cities")
+    public ResponseEntity<List<CityWeatherDto>> getTopCitiesWeather(
+            @RequestParam String excludeCity,
+            @RequestParam String excludeCountry) {
+        List<CityWeatherDto> response = service.getTopCitiesWeather(excludeCity, excludeCountry);
         return ResponseEntity.ok(response);
     }
 
     @PostMapping
-    public ResponseEntity<List<WeatherResponseDto>> postWeather(@RequestBody WeatherRequestDto request) {
-        List<WeatherResponseDto> response = service.postWeather(request);
+    public ResponseEntity<WeatherResponseDto> postWeather(@RequestBody WeatherRequestDto request) {
+        WeatherResponseDto response = service.postWeather(request);
         return ResponseEntity.ok(response);
     }
 }

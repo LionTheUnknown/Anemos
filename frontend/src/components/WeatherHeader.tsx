@@ -2,7 +2,7 @@ import '../common/styling/weather_header.css';
 import Grid from '@mui/material/Grid';
 import Stack from '@mui/material/Stack';
 import type { City } from '../common/types/City';
-import type { Forecast } from '../common/types/forecast';
+import type { CityWeather } from '../common/types/forecast';
 import WeatherIcon from './WeatherIcon';
 import CityAutocomplete from './CityAutocomplete';
 import { WEATHER_CODE_MAP } from '../common/records/weather_code';
@@ -13,7 +13,7 @@ interface WeatherHeaderProps {
   selectedCity: City | null;
   cityList: City[];
   inputValue: string;
-  forecast: Forecast | undefined;
+  forecast: CityWeather | undefined;
   onCityChange: (newValue: string | null, displayLabel?: string) => void;
   onInputChange: (newValue: string) => void;
   onKeyDown: (e: React.KeyboardEvent) => void;
@@ -58,7 +58,16 @@ export default function WeatherHeader({
           />
         </Grid>
         <Grid container size={2} sx={{ justifyContent: "flex-end"}}>
-          <FormatTempButton className="header-button" size="medium" />
+          <FormatTempButton
+            sx={{
+              width: 50,
+              height: 50,
+              borderRadius: '0.5rem',
+              border: '1px solid',
+              borderColor: '#282c34',
+            }}
+            size="medium"
+          />
         </Grid>
       </Grid>
 
@@ -75,7 +84,7 @@ export default function WeatherHeader({
         <Grid size={4}> 
             {forecast != null && (
               <WeatherIcon
-                weather_icon={weatherInfo.icon}
+                weather_code={forecast?.weather_code}
                 size={128}
                 alt="Current weather"
               />

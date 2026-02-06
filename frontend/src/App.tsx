@@ -1,8 +1,12 @@
 import './App.css';
 import {useState, useEffect} from 'react';
 import { useQuery } from '@tanstack/react-query';
-import type { Forecast } from './common/types/forecast';
-import { getForecast, postForecast } from './api/WeatherApi';
+import type { CityWeather } from './common/types/forecast';
+import {
+  getSelectedCityForecast,
+  getTopCitiesForecast,
+  postForecast,
+} from './api/WeatherApi';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import Papa from 'papaparse';
@@ -12,6 +16,7 @@ import WeatherHeader from './components/WeatherHeader';
 import WeatherDetails from './components/WeatherDetails';
 import CityList from './components/CityList';
 import { Item } from './components/Item';
+import WeatherGraph from './components/WeatherGraph';
 
 function App() {
   const [selectedCity, setSelectedCity] = useState<City | null>(null);
@@ -21,15 +26,28 @@ function App() {
   let localTime = new Date().toLocaleTimeString();
   const [twilightTime, setTwilightTime] = useState<string | null>(null);
 
-  const { data: forecastList } = useQuery<Forecast[]>({
-    queryKey: ['forecast', selectedCity?.city, selectedCity?.country],
-    queryFn: () => getForecast(selectedCity!),
+  const FIFTEEN_MINUTES_MS = 15 * 60 * 1000;
+  const HOUR_MS = 60 * 60 * 1000;
+
+  const { data: selectedCityData } = useQuery({
+    queryKey: ['forecast', 'selected', selectedCity?.city, selectedCity?.country],
+    queryFn: () => getSelectedCityForecast(selectedCity!),
     enabled: selectedCity !== null,
     retry: false,
+    refetchInterval: FIFTEEN_MINUTES_MS,
   });
 
-  const forecast = forecastList?.[0];
-  const topForecasts = forecastList?.slice(1) ?? [];
+  const { data: topForecasts = [] } = useQuery({
+    queryKey: ['forecast', 'top-cities', selectedCity?.city, selectedCity?.country],
+    queryFn: () =>
+      getTopCitiesForecast(selectedCity!.city, selectedCity!.country),
+    enabled: selectedCity !== null,
+    retry: false,
+    refetchInterval: HOUR_MS,
+  });
+
+  const forecast = selectedCityData?.selected_city_current;
+  const selectedCityForecast = selectedCityData?.selected_city_forecast ?? [];
 
   useEffect(() => {
     if (forecast?.sunrise && forecast?.sunset) {
@@ -59,6 +77,18 @@ function App() {
       .catch((err) => console.error('Failed to load cities CSV:', err));
   }, []);
 
+  const handleCitySelect = (cityWeather: CityWeather) => {
+    const found = cityList.find(
+      (c) => c.city === cityWeather.city_name && c.country === cityWeather.country
+    );
+    if (found) {
+      postForecast(found);
+      setSelectedCity(found);
+      setInputValue(`${found.city}, ${found.country}`);
+    }
+  };
+
+
   useEffect(() => {
     if (selectedCity && !inputValue) {
       setInputValue(`${selectedCity.city}, ${selectedCity.country}`);
@@ -75,8 +105,7 @@ function App() {
             <Grid container size={8} columns={8} spacing={2} sx={{
               border: '1px solid #2c2929',
               borderRadius: 1.5,
-              p: 2,
-            }}>
+              p: 2}}>
               <WeatherHeader
                 selectedCity={selectedCity}
                 cityList={cityList}
@@ -115,23 +144,22 @@ function App() {
               <WeatherDetails forecast={forecast} twilightTime={twilightTime} />
             </Grid>
 
-            <Grid container size={8} columns={4} spacing={2} sx={{
+            <Grid container size={8} columns={4} sx={{
             border: '1px solid #2c2929',
             borderRadius: 1.5,
-            p: 2,
             justifyContent: "center",
-            alignSelf: 'stretch',
-          }}>
+            alignSelf: 'stretch'}}>
             <Grid size={4}>
-              <Stack spacing={2} sx={{ height: '100%' }}>
+              <Stack sx={{ height: '100%' }}>
                 <Item sx={{ height: '100%', boxSizing: 'border-box' }}>
                   <div className="text-left text-xl">Other Countries</div>
 
-                  <CityList forecastList={topForecasts} />
+                  <CityList cityList={topForecasts} onCitySelect={handleCitySelect}/>
                 </Item>
 
                 <Item sx={{ height: '100%', boxSizing: 'border-box' }}>
-                  <div>7 Day Forecast graph</div>
+                  <div className="text-left text-xl">5 Day Forecast</div>
+                  <WeatherGraph forecast={selectedCityForecast} />
                 </Item>
               </Stack>
             </Grid>
