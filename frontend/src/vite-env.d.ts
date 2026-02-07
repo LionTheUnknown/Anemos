@@ -7,3 +7,13 @@ interface ImportMetaEnv {
 interface ImportMeta {
   readonly env: ImportMetaEnv
 }
+
+declare module './components/background/fog/FogEffect' {
+  interface FogEffectProps {
+    backgroundImageUrl: string;
+    type?: 'light' | 'dense';
+  }
+  const FogEffect: (props: FogEffectProps) => JSX.Element;
+  export default FogEffect;
+}
+

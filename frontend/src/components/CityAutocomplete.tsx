@@ -1,6 +1,20 @@
+import { useState, useEffect } from 'react';
 import { TextField, Autocomplete, InputAdornment } from '@mui/material';
 import LocationOn from '@mui/icons-material/LocationOn';
+import { matchSorter } from 'match-sorter';
 import type { City } from '../common/types/City';
+import '../common/styling/weather_header.css';
+
+const DEBOUNCE_MS = 300;
+
+function useDebounce<T>(value: T, delay: number): T {
+  const [debouncedValue, setDebouncedValue] = useState(value);
+  useEffect(() => {
+    const timer = setTimeout(() => setDebouncedValue(value), delay);
+    return () => clearTimeout(timer);
+  }, [value, delay]);
+  return debouncedValue;
+}
 
 interface CityAutocompleteProps {
   selectedCity: City | null;
@@ -19,29 +33,34 @@ export default function CityAutocomplete({
   onInputChange,
   onKeyDown,
 }: CityAutocompleteProps) {
+  const debouncedInput = useDebounce(inputValue, DEBOUNCE_MS);
+  const isSearching = inputValue !== debouncedInput && inputValue.length > 0;
+
+  const options = cityList.map((c) => `${c.city}, ${c.country}`);
+  const filterOptions = (opts: string[]) => {
+    const input = debouncedInput.trim();
+    if (!input) return [];
+    return matchSorter(opts, input, {
+      threshold: matchSorter.rankings.WORD_STARTS_WITH,
+      baseSort: (a, b) => a.index - b.index,
+    }).slice(0, 15);
+  };
+
   return (
     <Autocomplete
+      className="city-autocomplete"
       autoSelect
       disablePortal
-      options={cityList.map((c) => `${c.city}, ${c.country}`)}
-      filterOptions={(options, state) => {
-        if (state.inputValue.length < 1) return [];
-        const input = state.inputValue.toLowerCase();
-        return options
-          .filter((option) => option.toLowerCase().startsWith(input))
-          .sort((a, b) => {
-            const aExact = a.toLowerCase() === input;
-            const bExact = b.toLowerCase() === input;
-            if (aExact && !bExact) return -1;
-            if (!aExact && bExact) return 1;
-            return a.length - b.length || a.localeCompare(b);
-          })
-          .slice(0, 10);
-      }}
+      noOptionsText={null}
+      loading={isSearching}
+      loadingText="Searching..."
+      options={options}
+      filterOptions={(opts) => filterOptions(opts)}
       sx={{ width: 300 }}
       renderInput={(params) => (
         <TextField
           {...params}
+          placeholder="Select a city..."
           variant="outlined"
           slotProps={{
             input: {
@@ -70,7 +89,6 @@ export default function CityAutocomplete({
       inputValue={inputValue}
       onInputChange={(_, newInputValue) => onInputChange(newInputValue)}
       onKeyDown={onKeyDown}
-      className="city-autocomplete"
     />
   );
 }

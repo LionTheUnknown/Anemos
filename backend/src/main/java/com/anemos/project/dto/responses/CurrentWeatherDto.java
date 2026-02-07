@@ -16,7 +16,7 @@ public class CurrentWeatherDto {
     @JsonProperty("relative_humidity_2m")
     private Double humidity;
 
-    private Double rain;
+    private Double precipitation;
 
     @JsonProperty("temperature_2m")
     private Double temperature;

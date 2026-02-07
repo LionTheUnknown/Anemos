@@ -1,13 +1,26 @@
-.header-button.MuiButton-root {
-    border-radius: 0.5rem;
-    border-color: white;
-    color: white;
-  }
-  
-.header-button.MuiButton-contained {
-  background-color: #1f2933;
+
+.city-autocomplete .MuiOutlinedInput-root {
+  border-radius: 0.5rem;
+  background-color: rgba(70, 69, 69, 0.2);
 }
 
-.header-button.MuiButton-contained:hover {
-  background-color: #111827;
+.city-autocomplete .MuiOutlinedInput-root fieldset {
+  border-color: rgba(255, 255, 255, 0.23);
+}
+
+.city-autocomplete .MuiOutlinedInput-root:hover fieldset {
+  border-color: rgba(255, 255, 255, 0.4);
+}
+
+.city-autocomplete .MuiOutlinedInput-root.Mui-focused fieldset {
+  border-color: rgb(190, 14, 14);
+  border-width: 1px;
+}
+
+.city-autocomplete .MuiInputBase-input {
+  color: rgba(255, 255, 255, 0.87);
+}
+
+.city-autocomplete .MuiInputBase-input::placeholder {
+  color: rgba(255, 255, 255, 0.5);
 }

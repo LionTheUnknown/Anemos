@@ -14,9 +14,11 @@ export interface CityWeather {
   timezone?: string;
   temperature: number;
   apparent_temperature: number;
+  temperature_max?: number;
+  temperature_min?: number;
   windSpeed: number;
   humidity: number;
-  rain: number;
+  precipitation: number;
   time: string;
   sunset: string;
   sunrise: string;

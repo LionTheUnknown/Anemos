@@ -16,6 +16,9 @@ public class DailyWeatherDto {
     @JsonProperty("temperature_2m_max")
     private List<Double> temperature2mMax;
 
+    @JsonProperty("temperature_2m_min")
+    private List<Double> temperature2mMin;
+
     @JsonProperty("weather_code")
     private List<Integer> weatherCode;
 }

@@ -3,13 +3,11 @@ import Paper from '@mui/material/Paper';
 
 export const Item = styled(Paper)(({ theme }) => ({
   flex: 1,
-  backgroundColor: '#ffffff',
+  backgroundColor: 'rgba(70, 69, 69, 0.2)',
+  backdropFilter: 'blur(0.1rem)',
+  color: 'rgba(255, 255, 255)',
   ...theme.typography.body2,
-  padding: theme.spacing(1),
+  padding: '1rem',
+  borderRadius: '1rem',
   textAlign: 'center',
-  color: (theme.vars ?? theme).palette.text.secondary,
-  ...theme.applyStyles('dark', {
-    backgroundColor: 'rgba(0, 0, 0, 0.3)',
-    padding: '1rem',
-  }),
 }));

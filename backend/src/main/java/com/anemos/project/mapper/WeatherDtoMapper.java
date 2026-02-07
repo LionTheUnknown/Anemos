@@ -17,8 +17,11 @@ public class WeatherDtoMapper {
             return null;
         }
 
-        String sunrise = getFirst(response.getDaily(), DailyWeatherDto::getSunrise);
-        String sunset = getFirst(response.getDaily(), DailyWeatherDto::getSunset);
+        var daily = response.getDaily();
+        String sunrise = getFirst(daily, DailyWeatherDto::getSunrise);
+        String sunset = getFirst(daily, DailyWeatherDto::getSunset);
+        Double tempMax = getFirstDouble(daily, DailyWeatherDto::getTemperature2mMax);
+        Double tempMin = getFirstDouble(daily, DailyWeatherDto::getTemperature2mMin);
 
         return CityWeatherDto.builder()
                 .city(city)
@@ -28,9 +31,11 @@ public class WeatherDtoMapper {
                 .timezone(response.getTimezone())
                 .temperature(response.getCurrent().getTemperature())
                 .apparent_temperature(response.getCurrent().getApparent_temperature())
+                .temperatureMax(tempMax)
+                .temperatureMin(tempMin)
                 .windSpeed(response.getCurrent().getWindSpeed())
                 .humidity(response.getCurrent().getHumidity())
-                .rain(response.getCurrent().getRain())
+                .precipitation(response.getCurrent().getPrecipitation())
                 .time(response.getCurrent().getTime())
                 .sunrise(sunrise)
                 .sunset(sunset)
@@ -84,5 +89,12 @@ public class WeatherDtoMapper {
         if (daily == null) return null;
         List<String> times = getter.apply(daily);
         return (times != null && !times.isEmpty()) ? times.get(0) : null;
+    }
+
+    private Double getFirstDouble(DailyWeatherDto daily,
+                                 java.util.function.Function<DailyWeatherDto, List<Double>> getter) {
+        if (daily == null) return null;
+        List<Double> values = getter.apply(daily);
+        return (values != null && !values.isEmpty()) ? values.get(0) : null;
     }
 }

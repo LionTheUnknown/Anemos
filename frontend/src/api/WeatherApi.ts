@@ -22,7 +22,6 @@ export async function getSelectedCityForecast(
   if (!response.success || !response.data) {
     throw new Error(`Forecast for ${city.city} not found`);
   }
-  console.log(response.data.selected_city_current.rain);
   return response.data;
 }
 
@@ -57,7 +56,6 @@ export async function getForecast(city: City): Promise<WeatherResponse> {
   if (!response.success || !response.data) {
     throw new Error(`Forecast for ${city.city} not found`);
   }
-
   return response.data;
 }
 
@@ -75,6 +73,5 @@ export async function postForecast(city: City): Promise<WeatherResponse> {
   if (!response.success || !response.data) {
     throw new Error(`Failed to get forecast for ${city.city}`);
   }
-
   return response.data;
 }

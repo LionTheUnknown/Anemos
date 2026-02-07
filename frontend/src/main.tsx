@@ -5,6 +5,7 @@ import App from './App'
 import { QueryClientProvider, QueryClient } from '@tanstack/react-query'
 import { ThemeProvider, createTheme } from '@mui/material/styles'
 import CssBaseline from '@mui/material/CssBaseline'
+import { TempUnitProvider } from './common/context/TempUnitContext'
 
 const darkTheme = createTheme({
   palette: {
@@ -24,7 +25,11 @@ createRoot(rootElement).render(
     <ThemeProvider theme={darkTheme}>
       <CssBaseline />
       <QueryClientProvider client={queryClient}>
-        <App />
+        <TempUnitProvider>
+          <div style={{ display: 'flex', flexDirection: 'column', flex: 1, justifyContent: 'center'}}>
+            <App />
+          </div>
+        </TempUnitProvider>
       </QueryClientProvider>
     </ThemeProvider>
   </StrictMode>

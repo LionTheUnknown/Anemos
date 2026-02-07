@@ -19,9 +19,15 @@ public class CityWeatherDto {
     private String timezone;
     private Double temperature;
     private Double apparent_temperature;
+
+    @JsonProperty("temperature_max")
+    private Double temperatureMax;
+
+    @JsonProperty("temperature_min")
+    private Double temperatureMin;
     private Double windSpeed;
     private Double humidity;
-    private Double rain;
+    private Double precipitation;
     private String time;
     private String sunset;
     private String sunrise;
