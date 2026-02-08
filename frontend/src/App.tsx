@@ -115,7 +115,8 @@ function App() {
 
 
   useEffect(() => {
-    if (!selectedCity && topForecasts.length > 0 && cityList.length > 0) {
+    const saved = localStorage.getItem('lastSelectedCity');
+    if (!saved && !selectedCity && topForecasts.length > 0 && cityList.length > 0) {
       const top = topForecasts[0];
       const found = cityList.find(
         (c) => c.city === top.city_name && c.country === top.country
@@ -123,7 +124,6 @@ function App() {
       if (found) {
         setSelectedCity(found);
         setInputValue(`${found.city}, ${found.country}`);
-        localStorage.setItem('lastSelectedCity', JSON.stringify(found));
       }
     }
   }, [topForecasts, cityList]);
