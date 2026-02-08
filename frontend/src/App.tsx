@@ -12,7 +12,6 @@ import Grid from '@mui/material/Grid';
 import Papa from 'papaparse';
 import Stack from '@mui/material/Stack';
 import type { City } from './common/types/City';
-import BreakpointDebug from './components/BreakpointDebug';
 import Greeting from './components/Greeting';
 import WeatherHeader from './components/WeatherHeader';
 import WeatherDetails from './components/WeatherDetails';
@@ -208,7 +207,6 @@ function App() {
       </Grid>
     </Grid>
   </Box>
-  <BreakpointDebug />
   </>
   );
 }
