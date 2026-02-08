@@ -1,9 +1,10 @@
 import { describe, test, expect, mock, beforeEach, afterAll } from 'bun:test';
+import path from 'path';
 
 const mockWeatherRepo = {
   findByCityAndCountry: mock(() => null),
-  create: mock(() => {}),
-  updateCountByCityAndCountry: mock(() => {}),
+  create: mock(() => { }),
+  updateCountByCityAndCountry: mock(() => { }),
   isTop3Weather: mock(() => false),
   findTop3Weather: mock(() => []),
   findTop4Weather: mock(() => []),
@@ -16,11 +17,14 @@ const mockOpenMeteo = {
   mapToDailyForecastList: mock(() => []),
 };
 
-mock.module('../src/repository/weatherRepo.js', () => mockWeatherRepo);
-mock.module('../src/utils/openMeteo.js', () => mockOpenMeteo);
+const repoPath = path.join(import.meta.dir, '../src/repository/weatherRepo.js');
+const utilsPath = path.join(import.meta.dir, '../src/utils/openMeteo.js');
+
+mock.module(repoPath, () => mockWeatherRepo);
+mock.module(utilsPath, () => mockOpenMeteo);
 
 const { getSelectedCityWeather, getTopCitiesWeather, postWeather } =
-  await import('../src/services/weatherService.js');
+  await import(`../src/services/weatherService.js?t=${Date.now()}`);
 
 afterAll(() => { mock.restore(); });
 
