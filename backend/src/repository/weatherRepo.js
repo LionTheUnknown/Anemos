@@ -1,13 +1,13 @@
 import pg from 'pg';
 const { Pool } = pg;
 
-
 const pool = new Pool({
-  connectionString: process.env.DATABASE_URL,
-  ssl: {
-    require: true,
-    rejectUnauthorized: false,
-  },
+  host: process.env.POSTGRES_HOST,
+  port: 6543,
+  database: process.env.POSTGRES_DATABASE,
+  user: process.env.POSTGRES_USER,
+  password: process.env.POSTGRES_PASSWORD,
+  ssl: { require: true, rejectUnauthorized: false },
   max: 5,
 });
 
