@@ -1,19 +1,15 @@
 import pg from 'pg';
-
 const { Pool } = pg;
 
-const pool = process.env.POSTGRES_URL
-  ? new Pool({
-      connectionString: process.env.POSTGRES_URL,
-      ssl: { rejectUnauthorized: false },
-    })
-  : new Pool({
-      host: process.env.DB_HOST || 'localhost',
-      port: parseInt(process.env.DB_PORT || '5432', 10),
-      database: process.env.DB_NAME || 'anemos',
-      user: process.env.DB_USER || 'anemos',
-      password: process.env.DB_PASSWORD || 'anemos',
-    });
+
+const pool = new Pool({
+  connectionString: process.env.POSTGRES_URL,
+  ssl: {
+    require: true,
+    rejectUnauthorized: false,
+  },
+  max: 5,
+});
 
 export async function findByCityAndCountry(city, country) {
   const result = await pool.query(
