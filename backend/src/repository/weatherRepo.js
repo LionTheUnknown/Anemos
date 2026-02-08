@@ -1,14 +1,19 @@
 import pg from 'pg';
+
 const { Pool } = pg;
 
-process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
-
-const pool = new Pool({
-  connectionString: process.env.DATABASE_URL,
-  ssl: { require: true, rejectUnauthorized: false },
-  max: 5,
-});
-
+const pool = process.env.DATABASE_URL
+  ? new Pool({
+      connectionString: process.env.DATABASE_URL,
+      ssl: { rejectUnauthorized: false },
+    })
+  : new Pool({
+      host: process.env.DB_HOST || 'localhost',
+      port: parseInt(process.env.DB_PORT || '5432', 10),
+      database: process.env.DB_NAME || 'anemos',
+      user: process.env.DB_USER || 'anemos',
+      password: process.env.DB_PASSWORD || 'anemos',
+    });
 
 export async function findByCityAndCountry(city, country) {
   const result = await pool.query(
