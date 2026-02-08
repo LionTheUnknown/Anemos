@@ -1,4 +1,7 @@
-FROM eclipse-temurin:21-jre-alpine
-ARG JAR_FILE=build/libs/*.jar
-COPY ${JAR_FILE} app.jar
-ENTRYPOINT ["java","-jar","/app.jar"]
+FROM oven/bun:1-alpine
+WORKDIR /app
+COPY package.json bun.lock ./
+RUN bun install --frozen-lockfile
+COPY . .
+EXPOSE 8080
+CMD ["bun", "src/index.js"]

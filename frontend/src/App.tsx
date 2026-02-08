@@ -1,6 +1,6 @@
-import './App.css';
+import './common/styling/app.css';
 import { useState, useEffect } from 'react';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, keepPreviousData } from '@tanstack/react-query';
 import type { CityWeather } from './common/types/forecast';
 import {
   getSelectedCityForecast,
@@ -37,13 +37,13 @@ function App() {
     enabled: selectedCity !== null,
     retry: false,
     refetchInterval: FIFTEEN_MINUTES_MS,
+    placeholderData: keepPreviousData,
   });
 
   const { data: topForecasts = [], isLoading: isTopCitiesLoading } = useQuery({
     queryKey: ['forecast', 'top-cities', selectedCity?.city, selectedCity?.country],
     queryFn: () =>
-      getTopCitiesForecast(selectedCity!.city, selectedCity!.country),
-    enabled: selectedCity !== null,
+      getTopCitiesForecast(selectedCity?.city, selectedCity?.country),
     retry: false,
     refetchInterval: HOUR_MS,
   });
@@ -69,6 +69,7 @@ function App() {
       }
     }
   }, [forecast]);
+
   useEffect(() => {
     fetch('/worldcities.csv')
       .then((res) => res.text())
@@ -115,25 +116,33 @@ function App() {
 
 
   useEffect(() => {
-    if (selectedCity && !inputValue) {
+    if (!selectedCity && topForecasts.length > 0 && cityList.length > 0) {
+      const top = topForecasts[0];
+      const found = cityList.find(
+        (c) => c.city === top.city_name && c.country === top.country
+      );
+      if (found) {
+        setSelectedCity(found);
+        setInputValue(`${found.city}, ${found.country}`);
+        localStorage.setItem('lastSelectedCity', JSON.stringify(found));
+      }
+    }
+  }, [topForecasts, cityList]);
+
+  useEffect(() => {
+    if (selectedCity) {
       setInputValue(`${selectedCity.city}, ${selectedCity.country}`);
     }
-  }, [selectedCity, inputValue]);
+  }, [selectedCity]);
 
   return (
   <>
-  <Box sx={{ position: 'relative', zIndex: 1, display: 'flex', flexDirection: 'column', flex: 1, width: '100%', maxWidth: "120rem", maxHeight: '75rem', p: 2, mx: 'auto' }}>
+  <Box className="app-container">
     <Greeting />
-
-    <Grid container columns={16} spacing={2} sx={{ alignItems: 'stretch', flex: 1, minHeight: 0 }}>
-      <Grid container size={{ xs: 16, lg: 8 }} columns={8} sx={{
-        position: 'relative',
-        border: '1px solid #2c2929',
-        borderRadius: 1.5,
-        p: 2,
-        alignItems: 'stretch'}}>
+    <Grid container columns={16} spacing={2} className="app-main-grid">
+      <Grid className="bg-neutral-800/70 app-weather-grid" container size={{ xs: 16, lg: 8 }} columns={8}>
         <BackgroundApplier {...getEffectFromWeather(forecast)} fillContainer />
-        <Box sx={{ position: 'relative', display: 'flex', width: '100%', flexDirection: 'column', alignItems: 'stretch', justifyContent: 'space-around' }}>
+        <Box className="app-weather-content">
           <WeatherHeader
             selectedCity={selectedCity}
             cityList={cityList}
@@ -151,6 +160,7 @@ function App() {
                 }
                 setInputValue(displayLabel);
               } else {
+                setSelectedCity(null);
                 setInputValue("");
               }
             }}
@@ -175,27 +185,22 @@ function App() {
         </Box>
       </Grid>
 
-      <Grid container size={{ xs: 16, lg: 8 }} columns={4} sx={{
-        border: '1px solid #2c2929',
-        borderRadius: 1.5,
-        p: 2,
-        justifyContent: "center",
-        minHeight: 0}}>
-        <Grid size={4} sx={{ display: 'flex', flexDirection: 'column'}}>
-          <Stack sx={{ flex: 1, minHeight: 0, flexDirection: 'column', display: 'flex' }} spacing={2}>
-            <Grid size={4} sx={{ flex: 1, display: 'flex', flexDirection: 'column', marginBottom: 1 }}>
-              <Box sx={{ fontSize: { xs: '1.6rem', sm: '1.8rem', md: '1.9rem', lg: '2rem', xl: '2rem' }, textAlign: 'left' }}>Popular Cities</Box>
+      <Grid className="bg-neutral-800/70 app-sidebar-grid" container size={{ xs: 16, lg: 8 }} columns={4}>
+        <Grid size={4} className="app-sidebar-inner-grid">
+          <Stack className="app-sidebar-stack" spacing={2}>
+            <Grid size={4} sx={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
+              <Box className="app-section-title" sx={{ fontSize: 'clamp(1.6rem, 2.5vh, 2rem)' }}>5 Day Forecast</Box>
 
-              <Box sx={{ flex: 1, minHeight: 100 }}>
-                <CityList cityList={topForecasts} onCitySelect={handleCitySelect} isLoading={isTopCitiesLoading} isEmpty={topForecasts.length === 0} />
+              <Box className="app-forecast-content">
+                <WeatherGraph forecast={selectedCityForecast} isLoading={isSelectedCityLoading} isEmpty={selectedCityForecast.length === 0} />
               </Box>
             </Grid>
 
             <Grid size={4} sx={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
-              <Box sx={{ fontSize: { xs: '1.6rem', sm: '1.8rem', md: '1.9rem', lg: '2rem', xl: '2rem' }, textAlign: 'left' }}>5 Day Forecast</Box>
+              <Box className="app-section-title" sx={{ fontSize: 'clamp(1.6rem, 2.5vh, 2rem)' }}>Popular Cities</Box>
 
-              <Box sx={{ flex: 1, minHeight: 100, display: 'flex' }}>
-                <WeatherGraph forecast={selectedCityForecast} isLoading={isSelectedCityLoading} isEmpty={selectedCityForecast.length === 0} />
+              <Box className="app-section-content">
+                <CityList cityList={topForecasts} onCitySelect={handleCitySelect} isLoading={isTopCitiesLoading} isEmpty={topForecasts.length === 0} />
               </Box>
             </Grid>
           </Stack>

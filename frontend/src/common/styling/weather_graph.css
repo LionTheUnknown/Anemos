@@ -1,0 +1,17 @@
+@import './variables.css';
+
+.weather-graph-stack {
+  flex: 1;
+  align-items: stretch;
+  min-height: 10rem;
+}
+
+.weather-graph-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.1rem;
+  padding-top: 0.5rem;
+}
+

@@ -5,6 +5,7 @@ import { formatTemp } from '../common/utils/formatTemp';
 import { Item } from './Item';
 import WeatherIcon from './WeatherIcon';
 import WeatherGraphSkeleton from './skeletons/WeatherGraphSkeleton';
+import '../common/styling/weather_graph.css';
 
 interface WeatherGraphProps {
   forecast: FiveDayForecast;
@@ -18,12 +19,12 @@ export default function WeatherGraph({ forecast, isLoading, isEmpty }: WeatherGr
   }
 
   return (
-        <Stack direction="row" spacing={1} sx={{ flex: 1, alignItems: "stretch"}}>
+        <Stack direction="row" spacing={1} className="weather-graph-stack">
           {forecast.map((day) => (
-            <Item key={day.day} sx={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "space-between" }}>  
-              <Box sx={{ fontSize: { xs: '1.3rem', sm: '1.7rem', md: '1.5rem', lg: '1.5rem', xl: '2.125rem' } }}>{day.day}</Box>
-              <WeatherIcon weather_code={day.weather_code} size={{ xs: 50, sm: 40, md: 60, lg: 70, xl: 100 }}/>
-              <Box sx={{ fontSize: { xs: '1.3rem', sm: '1.7rem', md: '1.5rem', lg: '1.5rem', xl: '2.125rem' } }}>{formatTemp(day.temp)}</Box>
+            <Item key={day.day} className="!p-0 weather-graph-item">
+              <Box sx={{ fontSize: { xs: '1rem', sm: '1.7rem', md: '1.5rem', lg: '1.5rem', xl: '2.125rem', paddingTop: '0.5rem', paddingBottom: '0.5rem' } }}>{day.day}</Box>
+              <WeatherIcon weather_code={day.weather_code} size={{ xs: '2.5rem', sm: '2.5rem', md: '3.75rem', lg: '4.375rem', xl: '6.25rem' }}/>
+              <Box sx={{ fontSize: { xs: '1rem', sm: '1.7rem', md: '1.5rem', lg: '1.5rem', xl: '2.125rem' } }}>{formatTemp(day.temp)}</Box>
             </Item>
           ))}
         </Stack>

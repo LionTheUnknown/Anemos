@@ -15,7 +15,7 @@ export default function CityCardSkeleton() {
           </Stack>
         </Grid>
         <Grid size={1} sx={{ display: 'flex', justifyContent: 'center' }}>
-          <Skeleton variant="rectangular" width={56} height={56} sx={{ borderRadius: 1 }} />
+          <Skeleton variant="rectangular" width="3.5rem" height="3.5rem" sx={{ borderRadius: 1 }} />
         </Grid>
         <Grid size={1} sx={{ display: 'flex', justifyContent: 'flex-end' }}>
           <Skeleton variant="text" width={48} height={32} />

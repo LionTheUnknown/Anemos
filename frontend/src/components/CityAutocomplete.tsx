@@ -1,9 +1,10 @@
 import { useState, useEffect } from 'react';
-import { TextField, Autocomplete, InputAdornment } from '@mui/material';
-import LocationOn from '@mui/icons-material/LocationOn';
+import { TextField, Autocomplete } from '@mui/material';
 import { matchSorter } from 'match-sorter';
 import type { City } from '../common/types/City';
 import '../common/styling/weather_header.css';
+import PlaceIcon from '@mui/icons-material/Place';
+import InputAdornment from '@mui/material/InputAdornment';
 
 const DEBOUNCE_MS = 300;
 
@@ -43,7 +44,7 @@ export default function CityAutocomplete({
     return matchSorter(opts, input, {
       threshold: matchSorter.rankings.WORD_STARTS_WITH,
       baseSort: (a, b) => a.index - b.index,
-    }).slice(0, 15);
+    }).slice(0, 10);
   };
 
   return (
@@ -56,7 +57,7 @@ export default function CityAutocomplete({
       loadingText="Searching..."
       options={options}
       filterOptions={(opts) => filterOptions(opts)}
-      sx={{ width: 300 }}
+      sx={{ width: { xs: '100%', sm: '20rem', md: '22.5rem', lg: '23.75rem', xl: '25rem' }, maxWidth: '100%' }}
       renderInput={(params) => (
         <TextField
           {...params}
@@ -66,12 +67,9 @@ export default function CityAutocomplete({
             input: {
               ...params.InputProps,
               startAdornment: (
-                <>
-                  <InputAdornment position="start" sx={{ mr: 0.5 }}>
-                    <LocationOn sx={{ fontSize: 20 }} />
-                  </InputAdornment>
-                  {params.InputProps?.startAdornment}
-                </>
+                <InputAdornment position="start">
+                  <PlaceIcon />
+                </InputAdornment>
               ),
             },
           }}
@@ -84,10 +82,19 @@ export default function CityAutocomplete({
           onCityChange(cityName, newValue);
         } else {
           onCityChange(null);
+          onInputChange("");
         }
       }}
       inputValue={inputValue}
-      onInputChange={(_, newInputValue) => onInputChange(newInputValue)}
+      onInputChange={(_, newInputValue) => { if (newInputValue){
+        onInputChange(newInputValue)
+      }
+      else{
+        onInputChange("")
+      }
+        
+      }
+        }
       onKeyDown={onKeyDown}
     />
   );

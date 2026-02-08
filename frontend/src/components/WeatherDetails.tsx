@@ -1,4 +1,3 @@
-import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import type { CityWeather } from '../common/types/forecast';
 import { Item } from './Item';
@@ -8,6 +7,7 @@ import AirIcon from '@mui/icons-material/Air';
 import WaterDropIcon from '@mui/icons-material/WaterDrop';
 import WbTwilightIcon from '@mui/icons-material/WbTwilight';
 import CloudySnowingIcon from '@mui/icons-material/CloudySnowing';
+import '../common/styling/weather_details.css';
 
 interface WeatherDetailsProps {
   forecast: CityWeather | undefined;
@@ -22,69 +22,54 @@ export default function WeatherDetails({ forecast, twilightTime, isLoading, isEm
   }
 
   return (
-    <>
-      <Grid container spacing={1} size={8} columns={8} sx={{
-        justifyContent: "space-around",
-        alignItems: "baseline"}}>
-        <Grid size={8}>
-          <Stack direction="row" spacing={1} sx={{
-              justifyContent: "space-around",
-              alignItems: "center",}}> 
-            <Item>
-              <Stack spacing={1} sx={{alignItems: "flex-end"}}>
-                <Box sx={{ fontSize: { xs: '1.5rem', sm: '1.7rem', md: '1.5rem', lg: '1.875rem', xl: '2.125rem'}}}>
-                  <AirIcon sx={{ flexShrink: 0 }} />
-                  <Box component="span" sx={{ whiteSpace: 'nowrap' }}>Wind Status</Box>
-                </Box>
-
-                <Stack direction="row" spacing={0.5} alignItems="baseline">
-                  <Box sx={{ fontSize: { xs: '1.7rem', sm: '1.9rem', md: '2.25rem', lg: '2.5rem', xl: '2.75rem' } }}>{forecast?.windSpeed}</Box>
-                  <Box component="span"> km/h</Box>
-                </Stack>
-              </Stack>
-            </Item>
-
-            <Item>
-              <Stack spacing={1} sx={{alignItems: "flex-end"}}>
-                <Box sx={{ fontSize: { xs: '1.5rem', sm: '1.7rem', md: '1.5rem', lg: '1.875rem', xl: '2.125rem' }}}>
-                  <WaterDropIcon sx={{ flexShrink: 0 }} />
-                  <Box component="span" sx={{ whiteSpace: 'nowrap'}}>Humidity</Box>
-                </Box>
-
-                <Stack direction="row" spacing={0.5} alignItems="baseline">
-                  <Box sx={{ fontSize: { xs: '1.7rem', sm: '1.9rem', md: '2.25rem', lg: '2.5rem', xl: '2.75rem' } }}>{forecast?.humidity}</Box>
-                  <Box component="span"> %</Box>
-                </Stack>
-              </Stack>
-            </Item>
-
-            <Item>
-              <Stack spacing={0.5} sx={{alignItems: "flex-end"}}>
-                <Box sx={{ fontSize: { xs: '1.5rem', sm: '1.6rem', md: '1.5rem', lg: '1.76rem', xl: '2rem' }}}>
-                  <CloudySnowingIcon sx={{ flexShrink: 0 }} />
-                  <Box component="span" sx={{ whiteSpace: 'nowrap' }}>Precipitation</Box>
-                </Box>
-
-                <Stack direction="row" spacing={0.5} alignItems="baseline">
-                  <Box sx={{ fontSize: { xs: '1.7rem', sm: '1.9rem', md: '2.25rem', lg: '2.5rem', xl: '2.75rem' } }}>{forecast?.precipitation != null ? forecast.precipitation.toFixed(1) : '—'}</Box>
-                  <Box component="span"> mm</Box>
-                </Stack>
-              </Stack>
-            </Item>
-          </Stack>
-        </Grid>
-
-        <Grid size="grow">
-          <Item sx={{ padding:3}}>
-            <Stack direction="row" spacing={1} sx={{
-              justifyContent: "flex-start",
-              alignItems: "center",}}>
-              <WbTwilightIcon sx={{ fontSize: { xs: 44, sm: 52, md: 60, lg: 66, xl: 76 } }} />
-              <Box sx={{ fontSize: { xs: '1.6rem', sm: '1.8rem', md: '2rem', lg: '2.125rem', xl: '2.25rem' } }}>{twilightTime}</Box>
+    <Stack spacing={1} className="weather-details-container">
+      <Stack direction="row" spacing={1} sx={{ alignItems: 'stretch' }} className="weather-details-stack">
+        <Item>
+          <Stack spacing={1} className="weather-details-item-stack">
+            <Box className="weather-details-label" sx={{ fontSize: 'clamp(1.1rem, 3vh, 2.5rem)' }}>
+              <AirIcon className="weather-details-label-icon" sx={{ fontSize: 'clamp(1.6rem, 4vh, 3rem)' }} />
+              <Box component="span" className="weather-details-label-text">Wind Status</Box>
+            </Box>
+            <Stack direction="row" spacing={0.5} alignItems="baseline">
+              <Box sx={{ fontSize: 'clamp(1.8rem, 4vh, 3rem)' }}>{forecast?.windSpeed}</Box>
+              <Box component="span"> km/h</Box>
             </Stack>
-          </Item>
-        </Grid>
-      </Grid>
-    </>
+          </Stack>
+        </Item>
+
+        <Item>
+          <Stack spacing={1} className="weather-details-item-stack">
+            <Box className="weather-details-label" sx={{ fontSize: 'clamp(1.1rem, 3vh, 2.5rem)' }}>
+              <WaterDropIcon className="weather-details-label-icon" sx={{ fontSize: 'clamp(1.6rem, 4vh, 3rem)' }} />
+              <Box component="span" className="weather-details-label-text">Humidity</Box>
+            </Box>
+            <Stack direction="row" spacing={0.5} alignItems="baseline">
+              <Box sx={{ fontSize: 'clamp(1.8rem, 4vh, 3rem)' }}>{forecast?.humidity}</Box>
+              <Box component="span"> %</Box>
+            </Stack>
+          </Stack>
+        </Item>
+
+        <Item>
+          <Stack spacing={1} className="weather-details-item-stack">
+            <Box className="weather-details-label" sx={{ fontSize: 'clamp(1.1rem, 3vh, 2.5rem)' }}>
+              <CloudySnowingIcon className="weather-details-label-icon" sx={{ fontSize: 'clamp(1.6rem, 4vh, 3rem)' }} />
+              <Box component="span" className="weather-details-label-text">Precipitation</Box>
+            </Box>
+            <Stack direction="row" spacing={0.5} alignItems="baseline">
+              <Box sx={{ fontSize: 'clamp(1.8rem, 4vh, 3rem)' }}>{forecast?.precipitation != null ? forecast.precipitation.toFixed(1) : '—'}</Box>
+              <Box component="span"> mm</Box>
+            </Stack>
+          </Stack>
+        </Item>
+      </Stack>
+
+      <Item className="weather-details-twilight-item">
+        <Stack direction="row" spacing={1} className="weather-details-twilight-stack">
+          <WbTwilightIcon sx={{ fontSize: 'clamp(2.5rem, 5.5vh, 5rem)' }} />
+          <Box sx={{ fontSize: 'clamp(1.4rem, 3vh, 2.5rem)' }}>{twilightTime}</Box>
+        </Stack>
+      </Item>
+    </Stack>
   );
 }

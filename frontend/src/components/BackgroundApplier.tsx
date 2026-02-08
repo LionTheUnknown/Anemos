@@ -69,6 +69,7 @@ export default function BackgroundApplier({ effect, fogType, rainType, snowType,
         height: fillContainer ? '100%' : '100vh',
         zIndex: 0,
         overflow: 'hidden',
+        borderRadius: 'inherit',
       }}
     >
       <Suspense fallback={null}>

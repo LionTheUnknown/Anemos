@@ -48,7 +48,7 @@ export default function WeatherDetailsSkeleton() {
       <Grid size="grow">
         <Item>
           <Stack direction="row" spacing={1} sx={{ justifyContent: 'flex-start', alignItems: 'center' }}>
-            <WbTwilightIcon sx={{ fontSize: { xs: 44, sm: 52, md: 60, lg: 66, xl: 76 } }} />
+            <WbTwilightIcon sx={{ fontSize: { xs: '2.75rem', sm: '3.25rem', md: '3.75rem', lg: '4.125rem', xl: '4.75rem' } }} />
             <Skeleton variant="text" width={180} height={32} />
           </Stack>
         </Item>

@@ -21,7 +21,7 @@ export default function BreakpointDebug() {
         bgcolor: 'rgba(0,0,0,0.8)',
         color: '#0f0',
         p: 1,
-        fontSize: 12,
+        fontSize: '0.75rem',
         zIndex: 9999,
         fontFamily: 'monospace',
       }}

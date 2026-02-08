@@ -1,9 +1,0 @@
-CREATE TABLE IF NOT EXISTS weather (
-    id BIGSERIAL PRIMARY KEY,
-    city VARCHAR(255) NOT NULL,
-    country VARCHAR(255) NOT NULL,
-    count INTEGER NOT NULL DEFAULT 1,
-    latitude DOUBLE PRECISION,
-    longitude DOUBLE PRECISION,
-    UNIQUE(city, country)
-);

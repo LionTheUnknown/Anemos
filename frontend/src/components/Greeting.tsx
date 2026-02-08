@@ -9,7 +9,7 @@ function getGreeting(): string {
 
 export default function Greeting() {
   return (
-    <Box sx={{ fontSize: { xs: '2.5rem', sm: '2.75rem', md: '3rem', lg: '3.5rem', xl: '4rem' } }}>
+    <Box sx={{ fontSize: 'clamp(2rem, 4vh, 3.5rem)' }}>
       {getGreeting()}
     </Box>
   );

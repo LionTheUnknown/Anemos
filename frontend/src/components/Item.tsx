@@ -7,7 +7,7 @@ export const Item = styled(Paper)(({ theme }) => ({
   backdropFilter: 'blur(0.1rem)',
   color: 'rgba(255, 255, 255)',
   ...theme.typography.body2,
-  padding: '1rem',
+  padding: '0.8rem',
   borderRadius: '1rem',
   textAlign: 'center',
 }));

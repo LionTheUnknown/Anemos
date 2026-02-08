@@ -9,8 +9,8 @@ export default function WeatherHeaderSkeleton() {
         <Skeleton
           variant="rectangular"
           sx={{
-            width: { xs: 80, sm: 100, md: 128, lg: 150, xl: 256 },
-            height: { xs: 80, sm: 100, md: 128, lg: 150, xl: 256 },
+            width: { xs: '5rem', sm: '6.25rem', md: '8rem', lg: '9.375rem', xl: '16rem' },
+            height: { xs: '5rem', sm: '6.25rem', md: '8rem', lg: '9.375rem', xl: '16rem' },
             borderRadius: 1,
           }}
         />

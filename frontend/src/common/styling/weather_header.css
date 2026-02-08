@@ -1,26 +1,92 @@
+@import './variables.css';
+
+.weather-header-top-grid {
+  justify-content: space-between;
+  align-items: center;
+}
+
+.weather-header-date-grid {
+  justify-content: flex-start;
+  align-items: flex-start;
+}
+
+.weather-header-date {
+  white-space: nowrap;
+  color: var(--text-muted);
+}
+
+.weather-header-temp-stack {
+  justify-content: flex-start;
+  align-items: flex-end;
+}
+
+.weather-header-temp-sub {
+  color: var(--text-muted);
+}
+
+.weather-header-info-stack {
+  justify-content: flex-end;
+  align-items: flex-end;
+  text-align: right;
+}
+
+.weather-header-feels-like {
+  color: var(--text-muted);
+}
+
+.format-temp-button.MuiIconButton-root {
+  width: 4rem;
+  height: 4rem;
+  border-radius: 0.5rem;
+  border: 0.0625rem solid var(--border-secondary);
+  background-color: var(--bg-item);
+}
 
 .city-autocomplete .MuiOutlinedInput-root {
   border-radius: 0.5rem;
-  background-color: rgba(70, 69, 69, 0.2);
+  background-color: var(--bg-item);
 }
 
 .city-autocomplete .MuiOutlinedInput-root fieldset {
-  border-color: rgba(255, 255, 255, 0.23);
+  border-color: var(--border-secondary);
 }
 
 .city-autocomplete .MuiOutlinedInput-root:hover fieldset {
-  border-color: rgba(255, 255, 255, 0.4);
+  border-color: var(--border-hover);
 }
 
 .city-autocomplete .MuiOutlinedInput-root.Mui-focused fieldset {
-  border-color: rgb(190, 14, 14);
-  border-width: 1px;
+  border-color: var(--border-hover);
+  border-width: 0.0625rem;
 }
 
 .city-autocomplete .MuiInputBase-input {
-  color: rgba(255, 255, 255, 0.87);
+  color: var(--text-secondary);
+  font-size: 1.45rem;
 }
 
 .city-autocomplete .MuiInputBase-input::placeholder {
-  color: rgba(255, 255, 255, 0.5);
+  color: var(--text-placeholder);
+}
+
+.city-autocomplete .MuiAutocomplete-paper {
+  background-color: var(--bg-item);
+  border-radius: 0.5rem;
+  border: 0.0625rem solid var(--border-secondary);
+  color: var(--text-secondary);
+}
+
+.city-autocomplete .MuiAutocomplete-listbox {
+  color: var(--text-secondary);
+
+  font-size: 1.25rem;
+}
+
+.city-autocomplete .MuiAutocomplete-option {
+  color: var(--text-secondary);
+}
+
+.city-autocomplete .MuiAutocomplete-option:hover,
+.city-autocomplete .MuiAutocomplete-option[aria-selected="true"] {
+  background-color: rgba(255, 255, 255, 0.08);
 }

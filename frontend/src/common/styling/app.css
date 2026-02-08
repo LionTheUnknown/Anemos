@@ -1,0 +1,80 @@
+@import "tailwindcss";
+@import './variables.css';
+
+.app-container {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  width: 100%;
+  min-height: 100dvh;
+  max-width: 120rem;
+  padding: 0.8rem;
+  margin-left: auto;
+  margin-right: auto;
+  overflow-y: auto;
+}
+
+.app-main-grid {
+  align-items: stretch;
+  flex: 1;
+  min-height: 0;
+  max-height: clamp(30rem, 85vh, 60rem);
+}
+
+.app-weather-grid {
+  position: relative;
+  border: 0.0625rem solid var(--border-primary);
+  border-radius: 0.75rem;
+  padding: 1rem;
+  align-items: stretch;
+}
+
+.app-weather-content {
+  position: relative;
+  display: flex;
+  flex: 1;
+  min-height: 0;
+  width: 100%;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: space-between;
+}
+
+.app-sidebar-grid {
+  border: 0.0625rem solid var(--border-primary);
+  border-radius: 0.75rem;
+  padding: 1rem;
+  justify-content: center;
+}
+
+.app-sidebar-inner-grid {
+  display: flex;
+  flex-direction: column;
+}
+
+.app-sidebar-stack {
+  flex: 1;
+  min-height: 0;
+  flex-direction: column;
+  display: flex;
+}
+
+.app-section-title {
+  text-align: left;
+}
+
+.app-section-content {
+  flex: 1;
+  min-height: 6.25rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.app-forecast-content {
+  flex: 1;
+  min-height: 6.25rem;
+  display: flex;
+  padding-top: 0.5rem;
+}

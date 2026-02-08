@@ -26,13 +26,13 @@ export async function getSelectedCityForecast(
 }
 
 export async function getTopCitiesForecast(
-  excludeCity: string,
-  excludeCountry: string
+  excludeCity?: string,
+  excludeCountry?: string
 ): Promise<CityWeather[]> {
-  const params = new URLSearchParams({
-    excludeCity,
-    excludeCountry,
-  });
+  const params = new URLSearchParams();
+  if (excludeCity) params.set('excludeCity', excludeCity);
+  if (excludeCountry) params.set('excludeCountry', excludeCountry);
+
   const response = await apiFetch<CityWeather[]>(
     `/weather/top-cities?${params}`
   );

@@ -10,6 +10,7 @@ import { WEATHER_CODE_MAP } from '../common/records/weather_code';
 import { formatTemp } from '../common/utils/formatTemp';
 import type { WeatherInfo } from '../common/records/weather_code';
 import FormatTempButton from './FormatTempButton';
+import '../common/styling/weather_header.css';
 
 interface WeatherHeaderProps {
   selectedCity: City | null;
@@ -51,9 +52,7 @@ export default function WeatherHeader({
 
   return (
     <>
-      <Grid container size={8} columns={8} direction="row" sx={{
-        justifyContent: "space-between",
-        alignItems: "center"}}>
+      <Grid container size={8} columns={8} direction="row" className="weather-header-top-grid">
         <Grid size={6}>
           <CityAutocomplete
             selectedCity={selectedCity}
@@ -66,25 +65,16 @@ export default function WeatherHeader({
         </Grid>
         <Grid container size={2} sx={{ justifyContent: "flex-end"}}>
           <FormatTempButton
-            sx={{
-              width: 55,
-              height: 55,
-              borderRadius: '0.5rem',
-              border: '1px solid',
-              borderColor: 'rgba(255, 255, 255, 0.23)',
-              backgroundColor: 'rgba(70, 69, 69, 0.2)'
-            }}
+            className="format-temp-button"
             size="medium"
           />
         </Grid>
       </Grid>
 
-      <Grid size={8} sx={{
-          justifyContent: "flex-start",
-          alignItems: "flex-start"}}>
+      <Grid size={8} className="weather-header-date-grid">
         <Stack>
-          <Box sx={{ fontSize: { xs: '1.9rem', sm: '2.15rem', md: '2.4rem', lg: '2.75rem', xl: '4rem' } }}>{day}</Box>
-          <Box sx={{ fontSize: { xs: '1.5rem', sm: '1.65rem', md: '1.8rem', lg: '1.9rem', xl: '1.9rem' }, whiteSpace: 'nowrap' }}>{dayNumber} {month}, {year}</Box>
+          <Box sx={{ fontSize: 'clamp(1.9rem, 5vh, 4rem)' }}>{day}</Box>
+          <Box className="weather-header-date" sx={{ fontSize: 'clamp(1.6rem, 3.2vh, 3rem)' }}>{dayNumber} {month}, {year}</Box>
         </Stack>
       </Grid>
 
@@ -96,23 +86,23 @@ export default function WeatherHeader({
             <Grid size={4}>
               <WeatherIcon
                 weather_code={forecast?.weather_code}
-                size={{ xs: 80, sm: 180, md: 180, lg: 200, xl: 256 }}
+                size={{ xs: '8.75rem', sm: '11.25rem', md: '11.25rem', lg: '12.5rem', xl: '16rem' }}
                 alt="Current weather"
               />
             </Grid>
             <Grid size={4}>
-              <Stack spacing={2} sx={{ justifyContent: "flex-start", alignItems: "flex-end" }}>
-                <Stack sx={{ alignItems: "flex-end", textAlign: 'right' }}>
-                  <Box sx={{ fontSize: { xs: '2rem', sm: '2.35rem', md: '2.75rem', lg: '3.3rem', xl: '3.5rem' } }}>{formatTemp(forecast?.temperature)}</Box>
+              <Stack spacing={2} className="weather-header-temp-stack">
+                <Stack className="weather-header-info-stack">
+                  <Box sx={{ fontSize: 'clamp(2rem, 5vh, 4rem)' }}>{formatTemp(forecast?.temperature)}</Box>
                   {(forecast?.temperature_max != null || forecast?.temperature_min != null) && (
-                    <Box sx={{ color: 'rgba(255,255,255,0.8)', fontSize: { xs: '1.5rem', sm: '1.55rem', md: '1.5rem', lg: '1.6rem', xl: '1.6rem' } }}>
+                    <Box className="weather-header-temp-sub" sx={{ fontSize: 'clamp(1.2rem, 2vh, 1.9rem)' }}>
                       {formatTemp(forecast?.temperature_max)} / {formatTemp(forecast?.temperature_min)}
                     </Box>
                   )}
                 </Stack>
-                <Stack sx={{ justifyContent: "flex-end",alignItems: "flex-end", textAlign: 'right' }}>
-                  <Box sx={{ fontSize: { xs: '1.9rem', sm: '2.25rem', md: '2.2rem', lg: '2.85rem', xl: '3rem' } }}>{weatherInfo.label}</Box>
-                  <Box sx={{ color: 'rgba(255,255,255,0.8)', fontSize: { xs: '1.5rem', sm: '1.65rem', md: '1.8rem', lg: '1.9rem', xl: '1.9rem' } }}>Feels like {formatTemp(forecast?.apparent_temperature)}</Box>
+                <Stack className="weather-header-info-stack">
+                  <Box sx={{ fontSize: 'clamp(1.8rem, 3.5vh, 3.2rem)' }}>{weatherInfo.label}</Box>
+                  <Box className="weather-header-feels-like" sx={{ fontSize: 'clamp(1.2rem, 2vh, 1.9rem)' }}>Feels like {formatTemp(forecast?.apparent_temperature)}</Box>
                 </Stack>
               </Stack>
             </Grid>

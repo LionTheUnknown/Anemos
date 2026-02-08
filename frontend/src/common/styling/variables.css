@@ -1,0 +1,15 @@
+:root {
+  --text-primary: rgba(255, 255, 255, 1);
+  --text-secondary: rgba(255, 255, 255, 0.87);
+  --text-muted: rgba(255, 255, 255, 0.8);
+  --text-subtle: rgba(255, 255, 255, 0.6);
+  --text-placeholder: rgba(255, 255, 255, 0.5);
+
+  --border-primary: #2c2929;
+  --border-secondary: rgba(255, 255, 255, 0.23);
+  --border-hover: rgba(255, 255, 255, 0.4);
+  --border-focus: rgb(190, 14, 14);
+
+  --bg-item: rgba(70, 69, 69, 0.2);
+  --bg-neutral: rgba(38, 38, 38, 0.7);
+}
