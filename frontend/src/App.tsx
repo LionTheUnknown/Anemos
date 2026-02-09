@@ -124,6 +124,7 @@ function App() {
       if (found) {
         setSelectedCity(found);
         setInputValue(`${found.city}, ${found.country}`);
+        localStorage.setItem('lastSelectedCity', JSON.stringify(found));
       }
     }
   }, [topForecasts, cityList]);
@@ -135,79 +136,79 @@ function App() {
   }, [selectedCity]);
 
   return (
-  <>
-  <Box className="app-container">
-    <Greeting />
-    <Grid container columns={16} spacing={2} className="app-main-grid">
-      <Grid className="bg-neutral-800/70 app-weather-grid" container size={{ xs: 16, lg: 8 }} columns={8}>
-        <BackgroundApplier {...getEffectFromWeather(forecast)} fillContainer />
-        <Box className="app-weather-content">
-          <WeatherHeader
-            selectedCity={selectedCity}
-            cityList={cityList}
-            inputValue={inputValue}
-            forecast={forecast}
-            isLoading={isSelectedCityLoading}
-            isEmpty={!forecast}
-            onCityChange={(newValue, displayLabel) => {
-              if (newValue && displayLabel) {
-                const found = cityList.find((c) => `${c.city}, ${c.country}` === displayLabel);
-                if (found) {
-                  postForecast(found);
-                  setSelectedCity(found);
-                  localStorage.setItem('lastSelectedCity', JSON.stringify(found));
-                }
-                setInputValue(displayLabel);
-              } else {
-                setSelectedCity(null);
-                setInputValue("");
-              }
-            }}
-            onInputChange={setInputValue}
-            onKeyDown={(e) => {
-              if (e.key === 'Enter' && inputValue) {
-                const input = inputValue.toLowerCase();
-                const found = cityList.find(
-                  (c) => `${c.city}, ${c.country}`.toLowerCase().startsWith(input)
-                );
-                if (found) {
-                  postForecast(found);
-                  setSelectedCity(found);
-                  setInputValue(`${found.city}, ${found.country}`);
-                  localStorage.setItem('lastSelectedCity', JSON.stringify(found));
-                  e.preventDefault();
-                }
-              }
-            }}/>
+    <>
+      <Box className="app-container">
+        <Greeting />
+        <Grid container columns={16} spacing={2} className="app-main-grid">
+          <Grid className="bg-neutral-800/70 app-weather-grid" container size={{ xs: 16, lg: 8 }} columns={8}>
+            <BackgroundApplier {...getEffectFromWeather(forecast)} fillContainer />
+            <Box className="app-weather-content">
+              <WeatherHeader
+                selectedCity={selectedCity}
+                cityList={cityList}
+                inputValue={inputValue}
+                forecast={forecast}
+                isLoading={isSelectedCityLoading}
+                isEmpty={!forecast}
+                onCityChange={(newValue, displayLabel) => {
+                  if (newValue && displayLabel) {
+                    const found = cityList.find((c) => `${c.city}, ${c.country}` === displayLabel);
+                    if (found) {
+                      postForecast(found);
+                      setSelectedCity(found);
+                      localStorage.setItem('lastSelectedCity', JSON.stringify(found));
+                    }
+                    setInputValue(displayLabel);
+                  } else {
+                    setSelectedCity(null);
+                    setInputValue("");
+                  }
+                }}
+                onInputChange={setInputValue}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' && inputValue) {
+                    const input = inputValue.toLowerCase();
+                    const found = cityList.find(
+                      (c) => `${c.city}, ${c.country}`.toLowerCase().startsWith(input)
+                    );
+                    if (found) {
+                      postForecast(found);
+                      setSelectedCity(found);
+                      setInputValue(`${found.city}, ${found.country}`);
+                      localStorage.setItem('lastSelectedCity', JSON.stringify(found));
+                      e.preventDefault();
+                    }
+                  }
+                }} />
 
-          <WeatherDetails forecast={forecast} twilightTime={twilightTime} isLoading={isSelectedCityLoading} isEmpty={!forecast} />
-        </Box>
-      </Grid>
+              <WeatherDetails forecast={forecast} twilightTime={twilightTime} isLoading={isSelectedCityLoading} isEmpty={!forecast} />
+            </Box>
+          </Grid>
 
-      <Grid className="bg-neutral-800/70 app-sidebar-grid" container size={{ xs: 16, lg: 8 }} columns={4}>
-        <Grid size={4} className="app-sidebar-inner-grid">
-          <Stack className="app-sidebar-stack" spacing={2}>
-            <Grid size={4} sx={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
-              <Box className="app-section-title" sx={{ fontSize: 'clamp(1.6rem, 2.5vh, 2rem)' }}>5 Day Forecast</Box>
+          <Grid className="bg-neutral-800/70 app-sidebar-grid" container size={{ xs: 16, lg: 8 }} columns={4}>
+            <Grid size={4} className="app-sidebar-inner-grid">
+              <Stack className="app-sidebar-stack" spacing={2}>
+                <Grid size={4} sx={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
+                  <Box className="app-section-title" sx={{ fontSize: 'clamp(1.6rem, 2.5vh, 2rem)' }}>5 Day Forecast</Box>
 
-              <Box className="app-forecast-content">
-                <WeatherGraph forecast={selectedCityForecast} isLoading={isSelectedCityLoading} isEmpty={selectedCityForecast.length === 0} />
-              </Box>
+                  <Box className="app-forecast-content">
+                    <WeatherGraph forecast={selectedCityForecast} isLoading={isSelectedCityLoading} isEmpty={selectedCityForecast.length === 0} />
+                  </Box>
+                </Grid>
+
+                <Grid size={4} sx={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
+                  <Box className="app-section-title" sx={{ fontSize: 'clamp(1.6rem, 2.5vh, 2rem)' }}>Popular Cities</Box>
+
+                  <Box className="app-section-content">
+                    <CityList cityList={topForecasts} onCitySelect={handleCitySelect} isLoading={isTopCitiesLoading} isEmpty={topForecasts.length === 0} />
+                  </Box>
+                </Grid>
+              </Stack>
             </Grid>
-
-            <Grid size={4} sx={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
-              <Box className="app-section-title" sx={{ fontSize: 'clamp(1.6rem, 2.5vh, 2rem)' }}>Popular Cities</Box>
-
-              <Box className="app-section-content">
-                <CityList cityList={topForecasts} onCitySelect={handleCitySelect} isLoading={isTopCitiesLoading} isEmpty={topForecasts.length === 0} />
-              </Box>
-            </Grid>
-          </Stack>
+          </Grid>
         </Grid>
-      </Grid>
-    </Grid>
-  </Box>
-  </>
+      </Box>
+    </>
   );
 }
 
